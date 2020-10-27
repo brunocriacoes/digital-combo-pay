@@ -5,10 +5,12 @@ jobs:
     name: FTP-Deploy-Action
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2.1.0
+      with:
+        fetch-depth: 2
     - name: FTP-Deploy-Action
-      uses: SamKirkland/FTP-Deploy-Action@master
-      env:
-        FTP_SERVER: ftp.digitalcombo.com.br/wp-content/plugins/digital-combo-pay/
-        FTP_USERNAME: homologacao@homologacao.digitalcombo.com.br
-        FTP_PASSWORD: ${{ secrets.FTP_PASS }}
+      uses: SamKirkland/FTP-Deploy-Action@3.1.1
+      with:
+        ftp-server: ftp.digitalcombo.com.br/wp-content/plugins/digital-combo-pay
+        ftp-username: homologacao@homologacao.digitalcombo.com.br
+        ftp-password: ${{ secrets.FTP_PASS }}
