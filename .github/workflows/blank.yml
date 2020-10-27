@@ -1,0 +1,15 @@
+on: push
+name: Auto Deploy
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: FTP-Deploy-Action
+      uses: SamKirkland/FTP-Deploy-Action@master
+      env:
+        FTP_SERVER: ftp://162.241.203.181/wp-content/plugins/digital-combo-pay/
+        FTP_USERNAME: homologacao@homologacao.digitalcombo.com.br
+        FTP_PASSWORD: ${{ secrets.FTP_PASS }}
+        ARGS: --delete
