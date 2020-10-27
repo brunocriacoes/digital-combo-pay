@@ -12,4 +12,3 @@ jobs:
         FTP_SERVER: ftp.digitalcombo.com.br/wp-content/plugins/digital-combo-pay/
         FTP_USERNAME: homologacao@homologacao.digitalcombo.com.br
         FTP_PASSWORD: ${{ secrets.FTP_PASS }}
-        #ARGS: --delete
