@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;700&display=swap');
+.card {
+    display: block;
+    /* background: linear-gradient( #0096EA, #FF6B00 ); */
+    border-radius: 10px;
+    color: #FFF;
+    margin: 20px 70px;
+    padding: 20px;
+    box-shadow: 3px 3px 7px rgba(0, 0, 0, .3);
+    border: 1px solid #EEE;
+    font-family: 'Roboto Mono', monospace;
+    background-image: url( "../images/bg.jpg" );
+    background-size: cover;
+    background-position: center center;
+}
+.card img {
+    max-width: 100%;
+}
+.card__branch {
+    display: grid;
+    grid-template-columns: 50px 1fr 40px;
+    align-items: center;
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+.card_number {
+    display: block;
+    text-align-last: center;
+    font-size: 26px;
+    font-weight: bold;
+}
+.card__valid_cvv {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 20px;
+    padding: 0 35px;
+}
+.card_name {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+}
+.card_form {
+    display: grid;
+    padding: 20px;
+    font-family: 'Roboto Mono', monospace;
+    grid-gap: 20px;
+}
+.card_form label{
+    color: #666;
+    font-size: 12px;
+}
+.card_form label b {
+    color: #FF6B00;
+    font-weight: bold;
+}
+.card_grid_cvv_valid {
+    display: grid;
+    grid-template-columns: repeat( 2, 1fr );
+    grid-gap: 20px;
+}
+.card_form select {
+    display: block;
+    width: 100%;
+    border: 1px solid #DDD;
+    padding: 5px 10px;
+}
+[hidden] {
+    display: none !important;
+}
+.escolha_tipo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+}
+.escolha_tipo label {
+    display: block;
+    border: 3px solid #DDD;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    background-color: #0001;
+    filter: opacity(.5);
+}
+.escolha_tipo label img {
+    height: 32px;
+}
+.escolha_tipo label small {
+    display: block;
+    color: #111 !important;
+    font-weight: bold;
+}
+.escolha_tipo input:checked + label {
+    border: 3px solid #FF6B00;
+    filter: opacity(1);
+}
+@media screen and ( max-width: 800px )
+{
+    .card {
+        margin: 20px 10px;        
+    }
+    .card_number {
+        font-size: 18px;
+    }
+}
