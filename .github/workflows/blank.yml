@@ -9,8 +9,7 @@ jobs:
     - name: FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@master
       env:
-        FTP_SERVER: ftp://ftp.digitalcombo.com.br/
+        FTP_SERVER: ftp.digitalcombo.com.br/wp-content/plugins/digital-combo-pay/
         FTP_USERNAME: homologacao@homologacao.digitalcombo.com.br
         FTP_PASSWORD: ${{ secrets.FTP_PASS }}
-        local-dir: ./wp-content/plugins/digital-combo-pay/
         #ARGS: --delete
