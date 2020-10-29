@@ -121,6 +121,8 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 				break;
 		}
 
+		$this->debug( $validar_trasacao, true ) ;
+
 		if( $validar_trasacao ) 
 		{
 			$pedido->update_status( 'on-hold', 'Aguardando Confirmação de pagamentp' );		
@@ -143,9 +145,9 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 	public function debug( $teste, $isJson = false, $prefix = 'trasasion' )
 	{
 		if( $isJson ) {
-			file_put_contents( __DIR__ . "/../log/$prefix-" . Date( 'Y-m-d-H-i' ) . uniqid() . ".json", json_encode( $teste ) );
+			file_put_contents( __DIR__ . "/../log/$prefix-" . time() . ".json", json_encode( $teste ) );
 		} else {
-			file_put_contents( __DIR__ . "/../log/$prefix-" . Date( 'Y-m-d-H-i' ) . uniqid() . ".json", $teste );
+			file_put_contents( __DIR__ . "/../log/$prefix-" . time() . ".json", $teste );
 		}
 	}
 
