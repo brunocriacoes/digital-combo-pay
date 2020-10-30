@@ -1,0 +1,225 @@
+/*------------- GLOBAIS -------------*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    min-width: 100vw;
+    min-height: 100vh;
+    color: #666768;
+}
+a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+/*--------- CABEÇALHO ---------*/
+header {
+    padding: 20px;
+    text-align: center;
+}
+#logo {
+    width: 300px;
+}
+.ic {
+    display: inline-block;
+    width: 50px;
+    margin: 0 auto;
+}
+
+/*--------- OBRIGADO GENEROSIDADE---------*/
+#block1 {
+    background-color: #1e9ba8;
+    padding: 35px;
+    text-align: center;
+}
+#block1  h3 {
+    font-weight: bolder;
+    color: white;
+    font-size: 25px;
+}
+
+/*-------- GERAR BOLETO -------*/
+#block2 {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#block2 p:first-child {
+    font-size: 19px;
+    margin: 20px;
+}
+.boleto {
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    background-color: #e86e27;
+    color: white;
+    border-radius: 13px;
+    width: 200px;
+    margin: 20px;
+}
+.bolIco {
+    width: 25px;
+    margin: 0px 8px 0px 2px;
+}
+#inpContainer {
+    display: flex;
+    width: 470px;
+    margin-bottom: 20px;
+}
+input {
+    width: 100%;
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    background-color: #dedae7b6;
+    padding: 5px 15px;
+}
+button {
+    color: white;
+    background-color: #e86e27;
+    font-size: 15px;
+    border: none;
+    outline: none;
+    padding: 7px 30px;
+    margin: 0px 0px 0px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+
+}
+#block2 p:last-child {
+    margin-bottom: 20px;
+}
+
+/*-------- OBRIGADO, KLEBER! -------*/
+#block3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(0, 180, 196);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+#block3 h3 {
+    margin: 20 10px;
+}
+#block3 > div {
+    display: flex;
+    flex-direction: row;
+}
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 15px;
+}
+.fb{
+    width: 17px;
+    height: 30px;
+    margin-left: 10px;
+}
+.whats {
+    width: 28px;
+    height: 28px;
+    margin-left: 10px;
+
+}
+#faceShare {
+    background-color:#085a97;
+}
+#whatsShare {
+    background-color: #429813;
+}
+#doacao {
+    margin: 20px;
+    background-color: rgb( 0, 185, 85);
+    border: solid white 1px;
+    border-radius: 20px;
+    padding: 5px 10px;
+    box-shadow: inset 0px 0px 3px 1px rgba( 0, 0, 0, 0.2);
+}
+
+/*--------- FOOTER ---------*/
+footer {
+    text-align: center;
+    padding: 10px;
+    font-size: 10px;
+}
+footer div {
+    width: 40%;
+    margin: 0 auto;
+}
+.footIco {
+    width: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    header {
+        padding: 10px;
+    }
+    #inpContainer {
+        width: 95%;
+    }
+    footer {
+        text-align: justify;
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+    #inpContainer {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    input {
+        padding: 10px;
+        margin: 5px;
+        font-size: 15px;
+    }
+    button {
+        color: white;
+        background-color: #e86e27;
+        font-size: 15px;
+        border: none;
+        outline: none;
+        padding: 5px 25px;
+        border-radius: 20px;
+        cursor: pointer;
+        width: 100px;
+    }
+    .box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: left;
+        border-radius: 5px;
+        margin: 5px;
+        padding: 10px;  
+        font-size: 12px;
+    }
+    footer div {
+        width: 100%;
+    }
+    .fb{
+        width: 15px;
+        height: 25px;
+        margin-left: 10px;
+    }
+    .whats {
+        width: 25px;
+        height: 25px;
+        margin-left: 10px;
+    
+    }
+}

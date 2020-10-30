@@ -54,3 +54,11 @@ if( ! class_exists( 'WC_Order_Subscribe' ) ) :
 	include_once __DIR__ . "/includes/WC_Order_Subscribe.php";
 	WC_Order_Subscribe::init();
 endif;
+
+add_action( 'template_redirect', function() {
+	global $wp;
+	if ( is_checkout() && !empty( $wp->query_vars['order-received'] ) ) {
+		wp_redirect( get_site_url() .'/obrigado-por-sua-doacao/?id='. $wp->query_vars['order-received'] );
+		exit;
+	}
+} );
