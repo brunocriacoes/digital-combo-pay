@@ -94,6 +94,7 @@ final class WC_DC_FIG
             }
             switch ( $request['type'] ) 
             {
+                case 'invoice.paid':
                 case 'subscription.active':
                 case 'transaction.succeeded':
                     $order->update_status('completed', "Pagamento confirmado");
@@ -103,6 +104,9 @@ final class WC_DC_FIG
                     WC_DC_FIG::duplicar( $pedido_id );
                     // $order->update_status('completed', "Pagamento confirmado");
                     break;
+                case 'invoice.refunded':
+                case 'invoice.expired':
+                case 'invoice.overdue':
                 case 'subscription.deleted':
                 case 'subscription.expired':
                 case 'subscription.suspended':

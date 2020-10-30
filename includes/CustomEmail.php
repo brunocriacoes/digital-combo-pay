@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * http://loja.con/wp-admin/admin-ajax.php?action=previewemail
+ */
+
 class CustomEmail
 {
     function __construct() 
