@@ -39,7 +39,9 @@ endif;
 
 
 add_action( 'woocommerce_init', function() {
-	include_once __DIR__ . "./includes/DCP_Order.php";
+	include_once __DIR__ . "/includes/DCP_Order.php";
+	include_once __DIR__ . "/includes/CustomEmail.php";
+	$custom_email = new CustomEmail;
 } );
 
 if( ! class_exists( 'WC_DC_FIG' ) ) :

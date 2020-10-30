@@ -1,5 +1,5 @@
 <?php 
-// https://woocommerce.github.io/code-reference/classes/WC-Abstract-Legacy-Order.html
+
 class DCP_Order
 {
     public $order_id;
@@ -38,5 +38,15 @@ class DCP_Order
     public function get_ref()
     {
         return get_post_meta( $this->order_id, 'ORDER_REF', true );
+    }
+    
+    public function set_type( $type )
+    {
+        update_post_meta( $this->order_id, 'pagamento_metodo', $type );
+    }    
+    
+    public function get_type()
+    {
+        return get_post_meta( $this->order_id, 'pagamento_metodo', true );
     }
 }

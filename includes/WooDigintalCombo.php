@@ -121,8 +121,6 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 				break;
 		}
 
-		$this->debug( $validar_trasacao, true ) ;
-
 		if( $validar_trasacao ) 
 		{
 			$pedido->update_status( 'on-hold', 'Aguardando Confirmação de pagamentp' );		
@@ -176,12 +174,11 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			"amount"         => str_replace( '.', '', $pedido->total ),
 			"currency"       => "BRL",
 			"description"    => "venda",
-			// "logo"           => "https://i.imgur.com/YrjT5ye.png",
 			"logo"           => "https://i.ibb.co/qnSvTQn/logo-digital-combo.png",
 			"payment_method" => [
 				"expiration_date"   => $this->additionalDays( $this->vencimento_boleto ),
 				"body_instructions" => [ 
-						"Boleto exclusivo para Doação. Este Boleto Será utilizado para doação espontânea. ",
+						"Boleto exclusivo para Doação. Este Boleto será utilizado para doação espontânea. ",
 						"Não é uma cobrança",
 						"Não Cobra juros nem multa",
 						"Seja providência de Deus para nós."
@@ -228,7 +225,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			$pedido_id = $pedido->id;
 			update_post_meta( $pedido_id, "pagamento_metodo", 'Boleto' );
 		}
-		$this->debug( $boleto , true );	
+		$this->debug( $boleto , true, 'boleto' );	
 		return $validacao;
 	}
 
