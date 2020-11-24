@@ -1,35 +1,9 @@
 <?php
 
-function add_list_order_btn_duplicate( $columns ) 
-{
-    $columns['wc_order_duplicate'] = 'Duplicar';
-	return $columns;
-}
-add_filter( 'manage_edit-shop_order_columns', 'add_list_order_btn_duplicate' );
 
 
-function wc_btn_order_duplicate( $column ) 
-{
-    global $post;
-    if ( 'wc_order_duplicate' === $column ) :
-		echo "
-			<a href=\"javascript:void(0)\" onclick=\"globalThis.duplicar('$post->ID', this)\" class=\"button wc-action-button wc-action-button-processing processing\"> 
-				Duplicar 
-				#<b>$post->ID</b>
-			</a>
-		";
-	endif;
-}
-add_action( 'manage_shop_order_posts_custom_column', 'wc_btn_order_duplicate' );
 
 
-add_action( 'rest_api_init', function () {
-	register_rest_route( 'dc-api/v1', '/order/(?P<id>\d+)', array(
-	  'methods' => 'GET',
-	  'callback' => 'duplicar_order',
-	  'permission_callback' => false,
-	), false );
-} );
 
 function duplicar_order( $param )
 {
@@ -125,8 +99,3 @@ function duplicar_order( $param )
 		"user"   => $address
 	];
 }
-
-function wc_script_order_duplique_js() {
-    wp_enqueue_script( 'my_custom_script', plugin_dir_url( __FILE__ ) . 'static/js/wc-order-duplicate.js', [], '1.0' );
-}
-add_action( 'admin_enqueue_scripts', 'wc_script_order_duplique_js' );
