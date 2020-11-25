@@ -22,7 +22,7 @@
 <div class="loading js-pop-load" hidden>
     <img src="https://olaargentina.com/wp-content/uploads/2019/11/loading-gif-transparent-10.gif" alt="">
 </div>
-
+<?php endif; ?>
 <?php
 
 
@@ -149,4 +149,3 @@
 			"link" => $boleto->payment_method->url
 		];
 	}
-endif;
