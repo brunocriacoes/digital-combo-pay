@@ -64,7 +64,7 @@
 		$order_id = $parameter->get_param('id');
 		$order = new WC_Order( $order_id );
 		$config = [
-			'status'        => 'pending',
+			'status'        => 'on-hold',
 			'customer_id'   => $order->get_user_id(),
 			'customer_note' => "Duplicata de #$order_id",
 			'total'         => $order->get_total(),
@@ -96,7 +96,7 @@
 		endforeach;	
 		$order_new->add_order_note(  "CODIGO DE BARRAS: " . $boleto['barcode'], 'woothemes'  );
 		$order_new->add_order_note(  "TOKEN PEDIDO: " . $boleto['id'], 'woothemes'  );
-		$order_new->add_order_note(  "URL BOLETO: " .$boleto['link'], 'woothemes'  );
+		$order_new->add_order_note(  "URL BOLETO: " . $boleto['link'], 'woothemes'  );
 		$order_new->set_address( $address, 'billing' );
 		$order_new->set_address( $address, 'shipping' );
 		$order_new->calculate_totals();   
@@ -105,6 +105,12 @@
 		$proximo_pagamento = date('d/m/Y', strtotime('+30 days', time()));
 		update_post_meta( $order_new->get_id(), "pagamento_proximo_pagamento", $proximo_pagamento );
 		update_post_meta( $order_new->get_id(), "pagamento_metodo", 'Boleto' );
+
+		update_post_meta( $order_new->get_id(), 'ORDER_BARCODE', $boleto['barcode'] );
+		update_post_meta( $order_new->get_id(), 'ORDER_BOLETO', $boleto['link'] );
+		update_post_meta( $order_new->get_id(), 'ORDER_REF', $boleto['id'] );
+		update_post_meta( $order_new->get_id(), 'pagamento_metodo', 'Boleto' );
+
 		echo json_encode( [ "status" => true ] );
 	}
 
