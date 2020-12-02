@@ -108,7 +108,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			case 'cartao_credito':
 				if( $has_recorrente ) {
 					$validar_trasacao = $this->products_recorrente( $pedido_id, 'credit' );
-					$validar_trasacao = $this->cartao_credito( $pedido, 'credit' );
+					// $validar_trasacao = $this->cartao_credito( $pedido, 'credit' );
 				} else {
 					$validar_trasacao = $this->cartao_credito( $pedido );
 				}
@@ -400,8 +400,8 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			'idVendedor'  => $this->id_vendedor,
 			'card'        => $card,
 			'customer'    => $custome, 
-			// 'dueDate'     => date( 'Y-m-d' )
-			'dueDate'     => '2021-01-26'
+			'dueDate'     => date( 'Y-m-d' )
+			// 'dueDate'     => '2021-01-26'
 		]); 
 		return $resposta;
 	}
