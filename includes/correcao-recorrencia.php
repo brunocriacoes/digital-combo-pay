@@ -3,19 +3,17 @@
 /**
  * wp-admin/admin-ajax.php?action=correcao
  */
-
-
-function get_all_plans()
-{
-    // monthly
-    return [
-        "25" => "000000001",
-        "50" => "000000001",
-        "75" => "000000001",
-        "100" => "000000001",
-        "200" => "000000001",
-        "custon" => "000000001",
+function get_all_plans( $amout )
+{ 
+    $plans = [
+        "25" => "52c036c08fa14d85aa89009f935dd5d0",
+        "50" => "1f49998c24bb4e63b90e1a7cca472f30",
+        "75" => "2143156a50084880b15bda4cb1c725ea",
+        "100" => "a2c0334ece6f4fb3a9094f334f56c7cd",
+        "200" => "e4b1b0ee2718455881b706807ecd5943",
+        "aberto" => "efcc9daf45614b779cf32d19bc20dfe8",
     ];
+    return !empty( $plans[$amout] ) ? $plans[$amout] : $plans["aberto"] ;
 }
 function get_all_custumers()
 {
@@ -27,11 +25,12 @@ function get_all_custumers()
     }
     return $render;
 }
+
 function get_all_order()
 {
     global $wpdb;
     $costumer = get_all_custumers();
-    $results = $wpdb->get_results( "SELECT order_id, customer_id, net_total FROM {$wpdb->prefix}wc_order_stats WHERE status = 'wc-completed'" );
+    $results = $wpdb->get_results( "SELECT order_id, customer_id, net_total, date_created FROM {$wpdb->prefix}wc_order_stats WHERE status = 'wc-completed'" );
     $results = array_map( function( $order ) use ( $costumer ) {
         $order->type = get_post_meta( $order->order_id, 'pagamento_metodo', true);
         $order->costumer_id_zoop =  !empty( $costumer[$order->customer_id] ) ? $costumer[$order->customer_id] : null;
@@ -41,10 +40,27 @@ function get_all_order()
     $results = array_filter( $results, function( $order ) {
         return $order->type != "Boleto";
     } );
+    $results = array_map( function( $order ) {
+        $month_corruent = (int) date('m') ;
+        $month_payment = (int) date('m', strtotime($order->date_created) ) ;
+        $is_month =  $month_corruent <= $month_payment;
+        return [
+            "plan" => get_all_plans( $order->net_total ),
+            "on_behalf_of" => "1325ada242db4991af2df6178d5ee5aa",
+            "customer" => $order->costumer_id_zoop,
+            "payment_method" => "credit",
+            "due_date" => $is_month ? date('Y-m-d', strtotime('+62 days', strtotime($order->date_created))) : date('Y-m-d', strtotime('+32 days', strtotime(date('Y-m-d')))),
+            "due_since_date" => $is_month ? date('Y-m-d', strtotime('+32 days', strtotime($order->date_created))) : date('Y-m-d'),
+            "expiration_date" => "2025-01-15",
+            "amount" => number_format( $order->net_total, 2, '', ''  ),
+            "currency" => "BRL",
+        ];
+    }, $results );
     return $results;
 }
-
 add_action( 'wp_ajax_correcao', function() {
-    var_dump( get_all_order() );
+    echo "<pre>";
+    print_r( get_all_order() );
+    echo "</pre>";
     die;
 } );

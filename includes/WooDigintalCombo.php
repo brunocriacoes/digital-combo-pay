@@ -18,33 +18,24 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 		$this->id_vendedor         = $this->get_option( 'SELLER_ID' );
 		$this->pagar_como          = $this->get_option( 'pagar_como' );
 		$this->vencimento_boleto   = $this->get_option( 'vencimento_boleto' );
-		$this->mode_dev            = $this->get_option( 'mode_dev' );
-
-		
+		$this->mode_dev            = $this->get_option( 'mode_dev' );		
 		$this->plan_id             = false;
 		$this->plan_grace          = $this->get_option( 'dias_carencia' ) ? $this->get_option( 'dias_carencia' ) : 3;
 		$this->plan_tolerance      = $this->get_option( 'periodo_tolerancia' ) ? $this->get_option( 'periodo_tolerancia' ) : 3;
 		$this->plan_frequency      = "monthly";
 		$this->plan_amount         = 0;
-
-
 		$this->split           = $this->get_option( 'split' );
 		$this->split_prezuiso  = $this->get_option( 'prezuiso_split' );
 		$this->split_liquido   = $this->get_option( 'liquido_split' );
 		$this->split_percent   = $this->get_option( 'percentual_split' );
 		$this->split_valor     = $this->get_option( 'valor_split' );
 		$this->split_seller    = $this->get_option( 'id_split' );
-
-
-
 		add_action( 'woocommerce_update_options_payment_gateways_'. $this->id, [ $this, 'process_admin_options'] );		
-	}
-	
+	}	
 	public function init_form_fields() 
 	{	  
 		$this->form_fields = apply_filters( 'wc_offline_form_fields', DigitalFig::fields() );
 	}
-
 	public function products_recorrente( $pedido_id, $pedido_type = 'credit' )
 	{
 		$pedido = new WC_Order( $pedido_id );
@@ -54,21 +45,28 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			if( !empty( $recorrente ) ) {
 				$this->plan_frequency = $recorrente;
 				$this->plan_amount    = $product['subtotal'];
-				$this->new_plan();
 				update_post_meta( $pedido_id, "id_plano", $this->plan_id );
 				$resposta = $this->new_sub( $pedido_id, $pedido_type );
-			} 
-             
+			}
 		}
 		file_put_contents( 
 			__DIR__ . "/../log/_card-recorrente-" . Date( 'Y-m-d-H-i' ) . '-'. uniqid() . ".json", 
 			json_encode( $resposta ) 
 		);
-
 		return $resposta;
-
 	}
-
+	function get_plans( $amout )
+	{ 
+		$plans = [
+			"25" => "52c036c08fa14d85aa89009f935dd5d0",
+			"50" => "1f49998c24bb4e63b90e1a7cca472f30",
+			"75" => "2143156a50084880b15bda4cb1c725ea",
+			"100" => "a2c0334ece6f4fb3a9094f334f56c7cd",
+			"200" => "e4b1b0ee2718455881b706807ecd5943",
+			"aberto" => "efcc9daf45614b779cf32d19bc20dfe8",
+		];
+		return !empty( $plans[$amout] ) ? $plans[$amout] : $plans["aberto"] ;
+	}
 	public function has_products_recorrente( $pedido_id )
 	{
 		$pedido = new WC_Order( $pedido_id );
@@ -79,9 +77,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			}
 		}
 		return false;
-
 	}
-
 	public function process_payment( $pedido_id ) 
 	{	
 		global $woocommerce;
@@ -344,26 +340,6 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 		date_add( $date, date_interval_create_from_date_string( "$day days" ) );
 		return date_format( $date, 'Y-m-d' );
 	}
-	public function new_plan()
-	{
-		$gateway = new Gateway;
-		$plan    = [
-			"frequency" 	   => $this->plan_frequency,
-			"interval"         => 1,
-			"payment_methods"  => ["credit"],
-			"amount"		   => $this->plan_amount,
-			"description" 	   => "Plano Mensal Especial Silver",
-			"name"             => "Plano Silver",
-			"grace_period"     => $this->plan_grace ,
-			"tolerance_period" => $this->plan_tolerance ,
-			"currency"         => "BRL",
-			"duration"         => 12
-		];
-		$response      = $gateway->createPlan($plan);
-		$this->debug( $response, true, 'new-plan--'  );
-		$this->plan_id = $response->id;
-		return $response->id;
-	}
 
 	public function new_sub( $pedido_id, $pedido_type = 'credit' ) {
 		$gateway = new Gateway;
@@ -382,9 +358,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 				"postal_code"  => $pedido->get_billing_postcode(), 
 				"country_code" => "BR" 
 			]
-		];
-		
-		
+		];		
 		$mes_ano    = explode( '/', $_POST["card_valid"] );
 		$card = [
 			"expiration_month" => $mes_ano[0] ?? "",
@@ -396,12 +370,11 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 		$resposta = $gateway->subscriptions( [ 
 			'customerID'  => $this->getCustomerID( $pedido_type ),
 			'paymentType' => $pedido_type,
-			'idPlan' 	  => $this->plan_id,
+			'idPlan' 	  => $this->get_plans( $pedido->get_total() ),
 			'idVendedor'  => $this->id_vendedor,
 			'card'        => $card,
 			'customer'    => $custome, 
 			'dueDate'     => date( 'Y-m-d' )
-			// 'dueDate'     => '2021-01-26'
 		]); 
 		return $resposta;
 	}
