@@ -61,6 +61,8 @@ function get_all_order()
 add_action( 'wp_ajax_correcao', function() {
     echo "<pre>";
     print_r( get_all_order() );
+    echo "<ht>";
+    print_r( get_all_custumers() );
     echo "</pre>";
     die;
 } );
