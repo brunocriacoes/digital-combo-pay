@@ -6,10 +6,10 @@ class Zoop extends Curl {
     private $api;
 
     function __construct() {
-        $this->idMarketplace = WC_DC_FIG::ID_MKT_PLACE;
-        $this->keyZpk        = WC_DC_FIG::ZPK;
-        // $this->idMarketplace = '83824523b30a4f44a6231c46319c8c12';
-        // $this->keyZpk        = 'zpk_test_lcyUVmcv7ISdesnZe4m3w5eN';
+        // $this->idMarketplace = WC_DC_FIG::ID_MKT_PLACE;
+        // $this->keyZpk        = WC_DC_FIG::ZPK;
+        $this->idMarketplace = '83824523b30a4f44a6231c46319c8c12';
+        $this->keyZpk        = 'zpk_test_lcyUVmcv7ISdesnZe4m3w5eN';
         $this->api           = 'https://api.zoop.ws/';
     }
 
