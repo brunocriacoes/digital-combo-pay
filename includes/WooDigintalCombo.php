@@ -57,13 +57,21 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 	}
 	function get_plans( $amout )
 	{ 
+		// $plans = [
+		// 	"25" => "52c036c08fa14d85aa89009f935dd5d0",
+		// 	"50" => "1f49998c24bb4e63b90e1a7cca472f30",
+		// 	"75" => "2143156a50084880b15bda4cb1c725ea",
+		// 	"100" => "a2c0334ece6f4fb3a9094f334f56c7cd",
+		// 	"200" => "e4b1b0ee2718455881b706807ecd5943",
+		// 	"aberto" => "efcc9daf45614b779cf32d19bc20dfe8",
+		// ];
 		$plans = [
-			"25" => "52c036c08fa14d85aa89009f935dd5d0",
-			"50" => "1f49998c24bb4e63b90e1a7cca472f30",
-			"75" => "2143156a50084880b15bda4cb1c725ea",
-			"100" => "a2c0334ece6f4fb3a9094f334f56c7cd",
-			"200" => "e4b1b0ee2718455881b706807ecd5943",
-			"aberto" => "efcc9daf45614b779cf32d19bc20dfe8",
+			"25" => "5140c02128a542cd8e596c9438cc86c7",
+			"50" => "c4d81afa49d7449db4274f0c00cf4934",
+			"75" => "fd206d2198f84afcb66d467b87d7e8be",
+			"100" => "d5b69a71d54a46e08c56d1fb7e64932c",
+			"200" => "f0ed10132adf4521a590a08d49663d5f",
+			"aberto" => "1de3697467194660824560c1b8e5d5ee",
 		];
 		return !empty( $plans[$amout] ) ? $plans[$amout] : $plans["aberto"] ;
 	}
@@ -368,7 +376,8 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			"card_number"      => $_POST["card_number"] ?? ""
 		];
 		$resposta = $gateway->subscriptions( [ 
-			'customerID'  => $this->getCustomerID( $pedido_type ),
+			// 'customerID'  => $this->getCustomerID( $pedido_type ),
+			'customerID'  => '',
 			'paymentType' => $pedido_type,
 			'idPlan' 	  => $this->get_plans( $pedido->get_total() ),
 			'idVendedor'  => $this->id_vendedor,
