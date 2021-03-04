@@ -67,7 +67,7 @@
                 <b id="vCvv">123</b>
             </div>
         </div>
-        <div class="card_name" id="vName">FULANO DA SILVA</div>
+        <div class="card_name" id="vName">NOME COMPLETO</div>
     </div>
     <div class="card_form" >
         <div>
@@ -76,11 +76,11 @@
         </div>
         <div>
             <label for="">Nome<b>*</b></label>
-            <input type="text" value="" name="card_name" id="iName" placeholder="DIGITA AQUI SEU NOME" oninput="globalThis.card_name()" require>
+            <input type="text" value="" name="card_name" id="iName" placeholder="NOME COMPLETO" oninput="globalThis.card_name()" require>
         </div>
         <div class="card_grid_cvv_valid">
             <div>
-                <label for="">Data de Validade<b>*</b></label>
+                <label for="">Validade<b>*</b></label>
                 <input type="text" name="card_valid" value="" id="iValid" placeholder="MM/AA" oninput="globalThis.card_valid()" require>
             </div>
             <div>

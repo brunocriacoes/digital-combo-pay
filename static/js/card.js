@@ -26,7 +26,7 @@ globalThis.card_name = () =>
     if( $iName.value.length > 0 ) {
         $vName.innerHTML = $iName.value
     } else {
-        $vName.innerHTML = "Fulano da Silva"
+        $vName.innerHTML = "NOME COMPLETO"
     }
 }
 

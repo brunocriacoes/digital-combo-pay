@@ -1,6 +1,7 @@
 <?php
 
 class Gateway extends Zoop {
+
     public function createPlan( $plan ) { return json_decode($this->transactions( $plan, 'plans', true )); }
 
     public function customer( $buyer ) { return json_decode($this->transactions( $buyer, 'buyers', false, true )); }
@@ -63,6 +64,9 @@ class Gateway extends Zoop {
         $request = file_get_contents('php://input');
         file_put_contents( __DIR__ . "/../log/webhook-" . Date( 'Y-m-d-H-i-' ) . uniqid() . ".json", $request );
         $request = json_decode( $request );
+        $json = json_encode($request);
+        $data = date('d/m/Y H:i ->');
+		file_put_contents( __DIR__ . '/../.log', "{$data} WEBHOOK -> {$json} \n", FILE_APPEND );
         $response = [
             "type" => $request->type,
             "id"   => $request->payload->object->payment_method->id
