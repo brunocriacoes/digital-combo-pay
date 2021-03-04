@@ -2,6 +2,10 @@
 
 class WooDigintalCombo  extends WC_Payment_Gateway 
 {
+	function set_log( $log ) {
+		$data = date('d/m/Y H:i ->');
+		file_put_contents( __DIR__ . '/../.log', "{$data} {$log} \n", FILE_APPEND );
+	}
 	function __construct() 
 	{
 		$this->id                 = WC_DC_FIG::ID;
@@ -49,29 +53,17 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 				$resposta = $this->new_sub( $pedido_id, $pedido_type );
 			}
 		}
-		file_put_contents( 
-			__DIR__ . "/../log/_card-recorrente-" . Date( 'Y-m-d-H-i' ) . '-'. uniqid() . ".json", 
-			json_encode( $resposta ) 
-		);
 		return $resposta;
 	}
 	function get_plans( $amout )
 	{ 
-		// $plans = [
-		// 	"25" => "52c036c08fa14d85aa89009f935dd5d0",
-		// 	"50" => "1f49998c24bb4e63b90e1a7cca472f30",
-		// 	"75" => "2143156a50084880b15bda4cb1c725ea",
-		// 	"100" => "a2c0334ece6f4fb3a9094f334f56c7cd",
-		// 	"200" => "e4b1b0ee2718455881b706807ecd5943",
-		// 	"aberto" => "efcc9daf45614b779cf32d19bc20dfe8",
-		// ];
 		$plans = [
-			"25" => "5140c02128a542cd8e596c9438cc86c7",
-			"50" => "c4d81afa49d7449db4274f0c00cf4934",
-			"75" => "fd206d2198f84afcb66d467b87d7e8be",
-			"100" => "d5b69a71d54a46e08c56d1fb7e64932c",
-			"200" => "f0ed10132adf4521a590a08d49663d5f",
-			"aberto" => "1de3697467194660824560c1b8e5d5ee",
+			"25" => ENV['PLAN_25'],
+			"50" => ENV['PLAN_50'],
+			"75" => ENV['PLAN_75'],
+			"100" => ENV['PLAN_100'],
+			"200" => ENV['PLAN_200'],
+			"aberto" => ENV['PLAN_AUTO'],
 		];
 		return !empty( $plans[$amout] ) ? $plans[$amout] : $plans["aberto"] ;
 	}
@@ -104,24 +96,24 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 
 		switch ( $tipo_transacao ) 
 		{
-			case 'cartao_debito':
-				$validar_trasacao = $this->cartao_debito( $pedido );
-				$this->products_recorrente( $pedido_id, 'debit' );
-				break;
-				
+							
 			case 'cartao_credito':
 				if( $has_recorrente ) {
 					$validar_trasacao = $this->products_recorrente( $pedido_id, 'credit' );
-					// $validar_trasacao = $this->cartao_credito( $pedido, 'credit' );
+					$json = json_encode( $validar_trasacao );
+					$this->set_log("RES_SUBSCRIBE -> {$json}");
 				} else {
 					$validar_trasacao = $this->cartao_credito( $pedido );
+					$json = json_encode( $validar_trasacao );
+					$this->set_log("RES_CARD -> {$json}");
 				}
 				break;
 				
 			case 'boleto':
 			default:
 				$validar_trasacao = $this->boleto( $pedido );
-				// $this->products_recorrente( $pedido_id, 'boleto' );
+				$json = json_encode( $validar_trasacao );
+				$this->set_log("RES_BOLETO -> {$json}");
 				break;
 		}
 
@@ -142,15 +134,6 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 	{
 		$modo_de_pagamento = $this->pagar_como;
 		include_once __DIR__ . "/../public/formulario-tramparent-dc.php";
-	}
-
-	public function debug( $teste, $isJson = false, $prefix = 'trasasion' )
-	{
-		if( $isJson ) {
-			file_put_contents( __DIR__ . "/../log/$prefix-" . time() . ".json", json_encode( $teste ) );
-		} else {
-			file_put_contents( __DIR__ . "/../log/$prefix-" . time() . ".json", $teste );
-		}
 	}
 
 	public function boleto( $pedido )
@@ -228,8 +211,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 
 			$pedido_id = $pedido->id;
 			update_post_meta( $pedido_id, "pagamento_metodo", 'Boleto' );
-		}
-		$this->debug( $boleto , true, 'boleto' );	
+		}	
 		return $validacao;
 	}
 
@@ -326,7 +308,6 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			$idUser =  get_current_user_id();
 			update_post_meta( $idUser, "customerID_$venda_type", $pagar_com_cartao->customer );
 		}
-		file_put_contents( __DIR__ . "/../log/_card-" . Date( 'Y-m-d-H-i' ) . ".json", json_encode( $pagar_com_cartao ) );
 
 		$validacao = isset( $pagar_com_cartao->error ) ? false : true;
 		if ( $validacao )

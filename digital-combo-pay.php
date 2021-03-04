@@ -31,12 +31,15 @@
  
 defined( 'ABSPATH' ) || exit;
 
-
+$file_env =  __DIR__ . "/.env";
+if (file_exists($file_env)) :
+    $_ENV = parse_ini_file($file_env, TRUE, INI_SCANNER_RAW);
+    define('ENV', $_ENV);
+endif;
 
 if( ! defined( 'BASE_DCP' ) ) :
 	define( 'BASE_DCP', trailingslashit( WP_PLUGIN_URL ) . plugin_basename( dirname( __FILE__ ) ) );
 endif;
-
 
 add_action( 'woocommerce_init', function() {
 	include_once __DIR__ . "/includes/DCP_Order.php";

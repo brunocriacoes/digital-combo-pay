@@ -5,20 +5,28 @@ class Zoop extends Curl {
     private $keyZpk;
     private $api;
 
+    function set_log( $log ) {
+		$data = date('d/m/Y H:i ->');
+		file_put_contents( __DIR__ . '/../.log', "{$data} {$log} \n", FILE_APPEND );
+	}
+
     function __construct() {
-        // $this->idMarketplace = WC_DC_FIG::ID_MKT_PLACE;
-        // $this->keyZpk        = WC_DC_FIG::ZPK;
-        $this->idMarketplace = '83824523b30a4f44a6231c46319c8c12';
-        $this->keyZpk        = 'zpk_test_lcyUVmcv7ISdesnZe4m3w5eN';
-        $this->api           = 'https://api.zoop.ws/';
+        
+        $this->idMarketplace = ENV['KEY'];
+        $this->keyZpk        = ENV['ZPK'];
+        $this->api           = ENV['API'];
     }
 
     public function transactions( $arr, $url, $version = false, $type = false ) {
         $version = $version  ?? '' ? 'v2' : 'v1';
         $fullUrl = "{$this->api}{$version}/marketplaces/{$this->idMarketplace}/{$url}";
         if( $url == 'subscriptions' ) { $this->post( $fullUrl, $arr, [], $this->keyZpk, true ); }
-
-        return $this->post( $fullUrl, $arr, [], $this->keyZpk, $type );
+        $playload = $this->post( $fullUrl, $arr, [], $this->keyZpk, $type );
+        $requeste = json_encode( $arr );
+        $response = json_encode( json_decode($playload) );
+        $this->set_log( "POST /{$url} -> {$requeste}" );
+        $this->set_log( "RES /{$url} -> {$response}" );
+        return $playload;
     }
 
     public function boletoOrder( $info, $customer ) {
