@@ -34,6 +34,8 @@ function integracao_evendas( $param )
 	return $ex;
 }
 
+
+
 function get_payment_method( $request )
 {
     $filtro = array_filter( $request->meta_data, function( $meta ) {

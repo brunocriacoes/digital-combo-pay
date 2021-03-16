@@ -64,7 +64,7 @@
 		$order_id = $parameter->get_param('id');
 		$order = new WC_Order( $order_id );
 		$config = [
-			'status'        => 'on-hold',
+			'status'        => 'wc-on-hold',
 			'customer_id'   => $order->get_user_id(),
 			'customer_note' => "Duplicata de #$order_id",
 			'total'         => $order->get_total(),
@@ -101,6 +101,7 @@
 		$order_new->set_address( $address, 'shipping' );
 		$order_new->calculate_totals();   
 		$order_new->save();
+
 		update_post_meta( $order_new->get_id(), "pagamento_recorrente", 'Sim' );
 		$proximo_pagamento = date('d/m/Y', strtotime('+30 days', time()));
 		update_post_meta( $order_new->get_id(), "pagamento_proximo_pagamento", $proximo_pagamento );
@@ -111,6 +112,20 @@
 		update_post_meta( $order_new->get_id(), 'ORDER_REF', $boleto['id'] );
 		update_post_meta( $order_new->get_id(), 'pagamento_metodo', 'Boleto' );
 
+		
+		evendas( 
+			$order_new->get_id(), 
+			$order->get_total(), 
+			$order->get_billing_first_name(), 
+			$order->get_billing_last_name(), 
+			$order->get_billing_email(), 
+			"82999776698",
+			$boleto['barcode'],
+			$boleto['link'], 
+			$boleto['id'] 
+		);
+
+		
 		echo json_encode( [ "status" => true ] );
 	}
 
@@ -120,7 +135,8 @@
 		$date = date_create( Date( 'Y-m-d' ) );
 		date_add( $date, date_interval_create_from_date_string( "5 days" ) );
 		$date =  date_format( $date, 'Y-m-d' );
-		
+		$combo = new WooDigintalCombo();
+
 		$gateway    = new Gateway;
 		$usuario    = [
 			"first_name"  => $order->get_billing_first_name(), 
@@ -138,14 +154,20 @@
 			]
 		];
 		$compra = [
-			'on_behalf_of'	 => "1325ada242db4991af2df6178d5ee5aa",
+			'on_behalf_of'	 => $combo->id_vendedor,
 			"customerID"     => get_post_meta( $order->get_user_id, "customerID_boleto", true ),
 			"amount"         => str_replace( '.', '', $order->get_total() ),
 			"currency"       => "BRL",
 			"description"    => "venda",
 			"logo"           => "https://i.imgur.com/YrjT5ye.png",
 			"payment_method" => [
-				"expiration_date" => $date
+				"expiration_date" => $date,
+				"body_instructions" => [ 
+					"Boleto exclusivo para Doação. Este Boleto será utilizado para doação espontânea. ",
+					"Não é uma cobrança",
+					"Não Cobra juros nem multa",
+					"Seja providência de Deus para nós."
+				]
 			]
 		];
 		$boleto = $gateway->boleto( $usuario, $compra, [] );
@@ -155,3 +177,67 @@
 			"link" => $boleto->payment_method->url
 		];
 	}
+
+function order_log( $log ) {
+	$data = date('d/m/Y H:i ->');
+	file_put_contents( __DIR__ . '/../.log', "{$data} {$log} \n", FILE_APPEND );
+}
+
+function evendas( $id, $total, $first_name, $last_name, $email, $phone, $barcode, $boleto_link, $ref ) 
+{
+	
+	$playload = [
+		"id"           => $id,
+		"number"       => $id,
+    	"status"       => 'on-hold',
+    	"date_created" => date('Y-m-d'),
+        "total"        => $total,
+        "barcode"      => $barcode,
+        "boleto_link"  => $boleto_link,
+        "ref"          => $ref,
+        "billing" => [
+            "first_name" => $first_name,
+            "last_name"  => $last_name,
+            "email"      => $email,
+            "phone"      => $phone,
+        ],
+        "payment_method" =>  'digital_combo_pay_boleto',
+        "meta_data" => [
+			[
+				"id" => 007,
+				"key" => "ORDER_BARCODE",
+				"value" => $barcode
+			],
+			[
+				"id" => 007,
+				"key" => "ORDER_BOLETO",
+				"value" => $boleto_link
+			],
+			[
+				"id" => 007,
+				"key" => "ORDER_REF",
+				"value" => $ref
+			],
+			[
+				"id" => 007,
+				"key" => "pagamento_metodo",
+				"value" => 'digital_combo_pay_boleto'
+			]
+		]
+	];
+	$defaults = [
+		CURLOPT_POST           => true,
+		CURLOPT_HEADER         => 0,
+		CURLOPT_URL            => 'http://servicos.e-vendas.net.br/api/woocommerce/33804c49-42c0-4488-9e10-8ba5ab2b357e',
+		CURLOPT_POSTFIELDS     => json_encode( $playload ),
+		CURLOPT_HTTPHEADER     => [ 'Content-Type:application/json' ],
+		CURLOPT_RETURNTRANSFER => 1
+	];    
+	$con = curl_init();
+	curl_setopt_array( $con, $defaults );
+	$ex = curl_exec($con);
+	curl_close($con);
+	order_log( "RES EVENDAS ->" . $ex );
+	order_log( "LINK BOLETO ->" . $boleto_link );
+	
+}
