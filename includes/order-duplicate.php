@@ -118,15 +118,16 @@
 			$order->get_total(), 
 			$order->get_billing_first_name(), 
 			$order->get_billing_last_name(), 
-			$order->get_billing_email(), 
-			"82999776698",
+			$order->get_billing_email(),
+			$order->get_billing_phone(),
 			$boleto['barcode'],
 			$boleto['link'], 
 			$boleto['id'] 
 		);
 
-		
+		// "82999776698"		
 		echo json_encode( [ "status" => true ] );
+		sendEmail( $order->get_billing_email(), 'Boleto', $order_new );
 	}
 
 	function new_boleto( $order )
@@ -238,6 +239,24 @@ function evendas( $id, $total, $first_name, $last_name, $email, $phone, $barcode
 	$ex = curl_exec($con);
 	curl_close($con);
 	order_log( "RES EVENDAS ->" . $ex );
-	order_log( "LINK BOLETO ->" . $boleto_link );
 	
+}
+
+function get_custom_email_html( $order, $heading = false, $mailer ) {
+	$template = 'emails/customer-on-hold-order.php';
+	return wc_get_template_html( $template, array(
+		'order'         => $order,
+		'email_heading' => $heading,
+		'sent_to_admin' => false,
+		'plain_text'    => false,
+		'email'         => $mailer
+	) );
+
+}
+function sendEmail( $email, $subject, $order )
+{
+	$mailer = WC()->mailer();	
+	$content = get_custom_email_html( $order, $subject, $mailer );
+	$headers = "Content-Type: text/html\r\n";	
+	$mailer->send( $email, $subject, $content, $headers );
 }
