@@ -62,7 +62,7 @@ class Gateway extends Zoop {
 
     static function webHook() {
         $request = file_get_contents('php://input');
-        file_put_contents( __DIR__ . "/../log/webhook-" . Date( 'Y-m-d-H-i-' ) . uniqid() . ".json", $request );
+        // file_put_contents( __DIR__ . "/../log/webhook-" . Date( 'Y-m-d-H-i-' ) . uniqid() . ".json", $request );
         $request = json_decode( $request );
         $json = json_encode($request);
         $data = date('d/m/Y H:i ->');

@@ -58,13 +58,14 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 	function get_plans( $amout )
 	{ 
 		$plans = [
-			"25" => ENV['PLAN_25'],
-			"50" => ENV['PLAN_50'],
-			"75" => ENV['PLAN_75'],
-			"100" => ENV['PLAN_100'],
-			"200" => ENV['PLAN_200'],
+			"25.00" => ENV['PLAN_25'],
+			"50.00" => ENV['PLAN_50'],
+			"75.00" => ENV['PLAN_75'],
+			"100.00" => ENV['PLAN_100'],
+			"200.00" => ENV['PLAN_200'],
 			"aberto" => ENV['PLAN_AUTO'],
 		];
+		$this->set_log("VALOR PLAN -> {$amout}");
 		return !empty( $plans[$amout] ) ? $plans[$amout] : $plans["aberto"] ;
 	}
 	public function has_products_recorrente( $pedido_id )
