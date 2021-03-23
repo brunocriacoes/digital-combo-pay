@@ -358,14 +358,14 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			"card_number"      => $_POST["card_number"] ?? ""
 		];
 		$resposta = $gateway->subscriptions( [ 
-			// 'customerID'  => $this->getCustomerID( $pedido_type ),
 			'customerID'  => '',
 			'paymentType' => $pedido_type,
 			'idPlan' 	  => $this->get_plans( $pedido->get_total() ),
 			'idVendedor'  => $this->id_vendedor,
 			'card'        => $card,
 			'customer'    => $custome, 
-			'dueDate'     => date( 'Y-m-d' )
+			'dueDate'     => date( 'Y-m-d' ),
+			'amount'      => str_replace('.', '', "{$pedido->get_total()}")
 		]); 
 		return $resposta;
 	}

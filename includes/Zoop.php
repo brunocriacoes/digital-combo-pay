@@ -10,8 +10,7 @@ class Zoop extends Curl {
 		file_put_contents( __DIR__ . '/../.log', "{$data} {$log} \n", FILE_APPEND );
 	}
 
-    function __construct() {
-        
+    function __construct() {        
         $this->idMarketplace = ENV['KEY'];
         $this->keyZpk        = ENV['ZPK'];
         $this->api           = ENV['API'];

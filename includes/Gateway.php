@@ -22,8 +22,11 @@ class Gateway extends Zoop {
             "amount"       => $infoBuyer['amount'],
             "currency"     => "BRL",
             "on_behalf_of" => $infoBuyer['on_behalf_of'],
-            "customer"     => empty($infoBuyer['customerID']) ? $this->createUserToken($infoBuyer['card'], $infoBuyer['customer']) : $infoBuyer['customerID'],
+            "description"  => "Venda pelo site",
+            // "customer"     => empty($infoBuyer['customerID']) ? $this->createUserToken($infoBuyer['card'], $infoBuyer['customer']) : $infoBuyer['customerID'],
+            "customer"     => $this->createUserToken($infoBuyer['card'], $infoBuyer['customer']),
             "payment_type" => $infoBuyer['payment_type'],
+           
         ];
         $transf = !empty($splitRules) ? array_merge($transf, $splitRules) : $transf;
 
@@ -33,7 +36,6 @@ class Gateway extends Zoop {
     public function boleto( $buyer, $compra, $splitRules = [] ) {
         if( empty($buyer['customerID']) ) { $customer = $this->customer($buyer); }
         $compra = !empty($splitRules) ? array_merge($compra, $splitRules) : $compra;
-        // file_put_contents( __DIR__ . "/../log/boleto-" . Date( 'Y-m-d-H-i-' ) . uniqid() . ".json", json_encode($compra) );
 
         return json_decode( $this->boletoOrder( $compra, empty( $compra['customerID']) ? $customer->id : $compra['customerID'] ) );
     }
@@ -43,7 +45,6 @@ class Gateway extends Zoop {
             "token"    => $cardID,
             "customer" => $customerID
         ];
-
         return json_decode($this->transactions( $card, 'cards',false , true ));
     }
 
@@ -51,18 +52,17 @@ class Gateway extends Zoop {
         $subs = [
             "plan"         => $infoPlan['idPlan'],
             "on_behalf_of" => $infoPlan['idVendedor'],
-            "customer"     => empty( $infoPlan['customerID'] ) ? $this->createUserToken( $infoPlan['card'], $infoPlan['customer'] ) : $infoPlan['customerID'],
+            "customer"     => $this->createUserToken( $infoPlan['card'], $infoPlan['customer'] ),
             "currency"     => "BRL",
-            "due_date"     => $infoPlan['dueDate']
+            "due_date"     => $infoPlan['dueDate'],
+            "amount"       => $infoPlan['amount']
         ];
-        // file_put_contents( __DIR__ . "/../log/sub-" . Date( 'Y-m-d-H-i-' ) . uniqid() . ".json", json_encode($subs) );
 
         return json_decode($this->transactions( $subs, 'subscriptions', true, false ));
     }
 
     static function webHook() {
         $request = file_get_contents('php://input');
-        // file_put_contents( __DIR__ . "/../log/webhook-" . Date( 'Y-m-d-H-i-' ) . uniqid() . ".json", $request );
         $request = json_decode( $request );
         $json = json_encode($request);
         $data = date('d/m/Y H:i ->');
