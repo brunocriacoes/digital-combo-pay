@@ -284,7 +284,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 					"holder_name"      => $cartao["nome"],
 					"expiration_month" => $cartao["mes"],
 					"expiration_year"  => $cartao["ano"],
-					"card_number"      => $cartao["numero"],
+					"card_number"      => str_replace(' ', '', $cartao["numero"]),
 					"security_code"    => $cartao["cvv"]
 				],
 				"customer" => [
