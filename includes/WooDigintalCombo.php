@@ -102,11 +102,12 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 				if( $has_recorrente ) {
 					$validar_trasacao = $this->products_recorrente( $pedido_id, 'credit' );
 					$json = json_encode( $validar_trasacao );
-					$this->set_log("RES_SUBSCRIBE -> {$json}");
+					$this->set_log("RES_SUBSCRIBE -> {$json}");					
+					$ID = $validar_trasacao->id;
+					$pedido->add_order_note(  "TOKEN PEDIDO: $ID", 'woothemes'  );
 				} else {
 					$validar_trasacao = $this->cartao_credito( $pedido );
-					$json = json_encode( $validar_trasacao );
-					$this->set_log("RES_CARD -> {$json}");
+					$json = json_encode( $validar_trasacao );					
 				}
 				break;
 				
@@ -284,7 +285,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 					"holder_name"      => $cartao["nome"],
 					"expiration_month" => $cartao["mes"],
 					"expiration_year"  => $cartao["ano"],
-					"card_number"      => str_replace(' ', '', $cartao["numero"]),
+					"card_number"      => str_replace(' ', '', $cartao["card_number"]),
 					"security_code"    => $cartao["cvv"]
 				],
 				"customer" => [
@@ -304,6 +305,8 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 				]
 			], $splitRules
 		);
+		$ID = $pagar_com_cartao->payment_method->id;
+		$pedido->add_order_note(  "TOKEN PEDIDO: $ID", 'woothemes'  );
 		if( empty( $this->getCustomerID() ) )
 		{
 			$idUser =  get_current_user_id();
@@ -311,13 +314,6 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 		}
 
 		$validacao = isset( $pagar_com_cartao->error ) ? false : true;
-		if ( $validacao )
-		{
-			$ID     = $pagar_com_cartao->payment_method->id;
-			$pedido->add_order_note(  "TOKEN PEDIDO: $ID", 'woothemes' );
-			$pedido_id = $pedido->id;
-			update_post_meta( $pedido_id, "pagamento_metodo", 'Cartão' );
-		}
 		return $validacao;
 	}
 	public function cartao_debito( $pedido ) 
