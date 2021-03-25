@@ -266,7 +266,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 		$mes_ano    = explode( '/', $_POST["card_valid"] );
 		$cartao     = [
 			"nome"   => $_POST["card_name"] ?? "",
-			"numero" => $_POST["card_number"] ?? "",
+			"card_number"      => str_replace(' ', '',  $_POST["card_number"] ),
 			"cvv"    => $_POST["card_cvv"] ?? "",
 			"mes"    => $mes_ano[0] ?? "",
 			"ano"    => $mes_ano[1] ?? "",
@@ -355,7 +355,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			"holder_name"      => $_POST["card_name"] ?? "",
 			"expiration_year"  => $mes_ano[1] ?? "",
 			"security_code"    => $_POST["card_cvv"] ?? "",
-			"card_number"      => $_POST["card_number"] ?? ""
+			"card_number"      => str_replace(' ', '', $_POST["card_number"]),
 		];
 		$resposta = $gateway->subscriptions( [ 
 			'customerID'  => '',
