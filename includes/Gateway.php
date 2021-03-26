@@ -12,7 +12,6 @@ class Gateway extends Zoop {
         $customer  = $this->customer($customer);
         $card      = $this->tokenCard($card);
         $result    = $this->card($card->id, $customer->id);
-
         return $result->customer;
     }
 
