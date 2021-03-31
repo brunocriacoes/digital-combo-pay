@@ -49,12 +49,13 @@ class Gateway extends Zoop {
 
     public function subscriptions( $infoPlan ) {
         $subs = [
-            "plan"         => $infoPlan['idPlan'],
-            "on_behalf_of" => $infoPlan['idVendedor'],
-            "customer"     => $this->createUserToken( $infoPlan['card'], $infoPlan['customer'] ),
-            "currency"     => "BRL",
-            "due_date"     => $infoPlan['dueDate'],
-            "amount"       => $infoPlan['amount']
+            "plan"            => $infoPlan['idPlan'],
+            "on_behalf_of"    => $infoPlan['idVendedor'],
+            "customer"        => $this->createUserToken( $infoPlan['card'], $infoPlan['customer'] ),
+            "currency"        => "BRL",
+            "due_date"        => $infoPlan['dueDate'],
+            "amount"          => $infoPlan['amount'],
+            "expiration_date" => $infoPlan['expiration_date']
         ];
 
         return json_decode($this->transactions( $subs, 'subscriptions', true, false ));

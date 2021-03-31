@@ -353,15 +353,19 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			"security_code"    => $_POST["card_cvv"] ?? "",
 			"card_number"      => str_replace(' ', '', $_POST["card_number"]),
 		];
+		$data = date( 'Y-m-d' );
+		$proxima = date('Y-m-d', strtotime($data. ' + 30 days'));
+		$expiracao = date('Y-m-d', strtotime($data. ' + 365 days'));
 		$resposta = $gateway->subscriptions( [ 
-			'customerID'  => '',
-			'paymentType' => $pedido_type,
-			'idPlan' 	  => $this->get_plans( $pedido->get_total() ),
-			'idVendedor'  => $this->id_vendedor,
-			'card'        => $card,
-			'customer'    => $custome, 
-			'dueDate'     => date( 'Y-m-d' ),
-			'amount'      => str_replace('.', '', "{$pedido->get_total()}")
+			'customerID'      => '',
+			'paymentType'     => $pedido_type,
+			'idPlan' 	      => $this->get_plans( $pedido->get_total() ),
+			'idVendedor'      => $this->id_vendedor,
+			'card'            => $card,
+			'customer'        => $custome, 
+			'amount'          => str_replace('.', '', "{$pedido->get_total()}"),
+			'dueDate'         => $proxima,
+			'expiration_date' => $expiracao
 		]); 
 		return $resposta;
 	}
