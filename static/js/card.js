@@ -36,12 +36,12 @@ globalThis.card_valid = () =>
     let $vValid = document.querySelector( "#vValid" )
     let mascara = $iValid.value
     mascara      = mascara.replace( /\D/gi, '' )
-    mascara      = mascara.replace( /(\d{2})(\d{2})(.*)/gi, '$1/$2' )
+    mascara      = mascara.replace( /(\d{2})(\d{4})(.*)/gi, '$1/$2' )
     if( mascara.length > 0 ) {
         $vValid.innerHTML = mascara
         $iValid.value     = mascara
     } else {
-        $vValid.innerHTML = "02/29"
+        $vValid.innerHTML = "02/2020"
     }
 }
 

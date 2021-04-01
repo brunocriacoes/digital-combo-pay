@@ -60,7 +60,7 @@
         <div class="card__valid_cvv">
             <div>
                 <span>VALID</span>
-                <b id="vValid" >02/29</b>
+                <b id="vValid" >02/2020</b>
             </div>
             <div>
                 <span>CVV</span>
@@ -81,7 +81,7 @@
         <div class="card_grid_cvv_valid">
             <div>
                 <label for="">Validade<b>*</b></label>
-                <input type="text" name="card_valid" value="" id="iValid" placeholder="MM/AA" oninput="globalThis.card_valid()" require>
+                <input type="text" max="7" name="card_valid" value="" id="iValid" placeholder="MM/AAAA" oninput="globalThis.card_valid()" require>
             </div>
             <div>
                 <label for="">CVV<b>*</b></label>
