@@ -1,12 +1,5 @@
 <?php
 
-/**
- * wp-admin/admin-ajax.php?action=correcao
- * 7e704295b1ba41e88574e24830d5369a
- * zpk_prod_77hQAABdrBzAKVr8cZuaHWk8
- * order_id;date;price;payment_method_id;Customer_id;transaction_id
- */
-
 function get_data()
 {
     $csv = "9544 ;18 de outubro de 2020;25;acd5a7bd0dcb4e10ae7c1659295602fa;b84b20c36b62480eafd4467d749a203e;74426c82b4d14a16958af6ad7a116b7a

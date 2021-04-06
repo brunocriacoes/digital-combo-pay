@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin Name: Woo Digital Combo
  * Plugin URI: https://digitalcombo.com.br/solucoes-de-pagamento
@@ -68,4 +67,4 @@ add_action( 'template_redirect', function() {
 
 include __DIR__ . "/includes/dcp_v1_evendas.php";
 include __DIR__ . "/includes/order-duplicate.php";
-include __DIR__ . "/includes/correcao-recorrencia.php";
+// include __DIR__ . "/includes/correcao-recorrencia.php";

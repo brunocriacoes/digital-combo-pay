@@ -1,32 +1,6 @@
-<?php if( is_admin() ): ?>
-<style>
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(0, 0, 0, .7);
-    position: fixed;
-    backdrop-filter: blur(3px);
-    z-index: 99999999999;
-}
-.loading img {
-    display: block;
-    width: 50px;
-}
-[hidden] { 
-    display: none !important;
-}
-</style>
-<div class="loading js-pop-load" hidden>
-    <img src="https://olaargentina.com/wp-content/uploads/2019/11/loading-gif-transparent-10.gif" alt="">
-</div>
-<?php endif; ?>
 <?php
 
-
-	add_filter( 'manage_edit-shop_order_columns', function( $cols ) {
+add_filter( 'manage_edit-shop_order_columns', function( $cols ) {
 		$cols["dcp_btn_duplicate"] = "Duplicar";
 		return $cols;
 	} );
@@ -260,3 +234,31 @@ function sendEmail( $email, $subject, $order )
 	$headers = "Content-Type: text/html\r\n";	
 	$mailer->send( $email, $subject, $content, $headers );
 }
+add_action( 'admin_footer', function() {
+
+	echo '
+		<style>
+		.loading {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+			width: 100vw;
+			background-color: rgba(0, 0, 0, .7);
+			position: fixed;
+			backdrop-filter: blur(3px);
+			z-index: 99999999999;
+		}
+		.loading img {
+			display: block;
+			width: 50px;
+		}
+		[hidden] { 
+			display: none !important;
+		}
+		</style>
+		<div class="loading js-pop-load" hidden>
+			<img src="https://olaargentina.com/wp-content/uploads/2019/11/loading-gif-transparent-10.gif" alt="">
+		</div>';
+} );
+
