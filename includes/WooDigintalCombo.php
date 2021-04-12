@@ -354,8 +354,8 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			"card_number"      => str_replace(' ', '', $_POST["card_number"]),
 		];
 		$data = date( 'Y-m-d' );
-		$proxima = date('Y-m-d', strtotime($data. ' + 30 days'));
-		$expiracao = date('Y-m-d', strtotime($data. ' + 365 days'));
+		$proxima = str_replace(' ', 'T', date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s'). ' + 10 minutes')) ) .'.000Z';
+		$expiracao = date('Y-m-d', strtotime($data. ' + 1825 days'));
 		$resposta = $gateway->subscriptions( [ 
 			'customerID'      => '',
 			'paymentType'     => $pedido_type,
