@@ -125,7 +125,7 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			$woocommerce->cart->empty_cart();
 		}
 		
-		if( strlen( $_POST["card_valid"] ?? '' ) != 7 ) {
+		if( strlen( $_POST["card_valid"] ?? '' ) != 7 && $_POST["type_pagamento"] == 'cartao_credito') {
 			$validar_trasacao = false;
 		}
 
