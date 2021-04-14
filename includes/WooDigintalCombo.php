@@ -124,7 +124,10 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 			$pedido->update_status( 'on-hold', 'Aguardando Confirmação de pagamentp' );		
 			$woocommerce->cart->empty_cart();
 		}
-
+		
+		if( strlen( $_POST["card_valid"] ?? '' ) != 7 ) {
+			$validar_trasacao = false;
+		}
 
 		return array(
 			'result' 	=> $validar_trasacao ? 'success' : 'error',

@@ -81,7 +81,7 @@
         <div class="card_grid_cvv_valid">
             <div>
                 <label for="">Validade<b>*</b></label>
-                <input type="text" max="7" name="card_valid" value="" id="iValid" placeholder="MM/AAAA" oninput="globalThis.card_valid()" require>
+                <input type="text" min="7" max="7" name="card_valid" value="" id="iValid" placeholder="MM/AAAA" oninput="globalThis.card_valid()" require>
             </div>
             <div>
                 <label for="">CVV<b>*</b></label>
