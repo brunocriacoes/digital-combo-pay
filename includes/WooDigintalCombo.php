@@ -267,13 +267,14 @@ class WooDigintalCombo  extends WC_Payment_Gateway
 	public function cartao_credito( $pedido, $venda_type = "credit" )
 	{
 		$gateway    = new Gateway;
-		$mes_ano    = explode( '/', $_POST["card_valid"] );
+        $mes_ano = str_replace('/', '', $_POST["card_valid"] );
+
 		$cartao     = [
 			"nome"   => $_POST["card_name"] ?? "",
 			"card_number"      => str_replace(' ', '',  $_POST["card_number"] ),
 			"cvv"    => $_POST["card_cvv"] ?? "",
-			"mes"    => $mes_ano[0] ?? "",
-			"ano"    => $mes_ano[1] ?? "",
+			"mes"    => substr( $mes_ano, 0, 2 ) ?? "",
+			"ano"    => str_pad(substr( $mes_ano, 2, 4 ) , 4 , '20' , STR_PAD_LEFT) ?? "",
 		];
 		
 		$splitRules = $this->getSplitRules();
